@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>FunkyBDD.SxS.Selenium.Browserstack</AssemblyName>
+    <RootNamespace>FunkyBDD.SxS.Selenium.Browserstack</RootNamespace>
+    <IsPackable>true</IsPackable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Andreas Karz</Authors>
+    <Company>Swiss Life AG</Company>
+    <Description>Selenium helpers to optimize the work with BrowserStack with IWebDriver</Description>
+    <Copyright>Swiss Life AG</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/AndreasKarz/FunkyBDD.SxS.Selenium.Browserstack</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/AndreasKarz/FunkyBDD.SxS.Selenium.Browserstack</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <PackageIconUrl>https://raw.githubusercontent.com/AndreasKarz/FunkyBDD.SxS.Selenium.Browserstack/master/icon.png</PackageIconUrl>
+    <PackageTags>selenium iwebelement bdd pom apom testing extension automated sxs</PackageTags>
+    <PackageReleaseNotes>Init</PackageReleaseNotes>
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;0618</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="packages\**" />
+    <EmbeddedResource Remove="packages\**" />
+    <None Remove="packages\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Selenium.Firefox.WebDriver" Version="0.24.0" />
+    <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
+  </ItemGroup>
+
+</Project>
