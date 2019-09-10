@@ -11,18 +11,62 @@ namespace FunkyBDD.SxS.Selenium.Browserstack
 {
     public class Browser
     {
-        public IWebDriver Driver;
-        public int AccuracyInPromille = 1000;
-        public int DefaultTimeout = 120;
-        public bool isDesktop = false;
-        public string Status = "NOK";
-        public bool BrowserstackLocal = false;
-        public string BrowserstackProject = Environment.GetEnvironmentVariable("BROWSERSTACK_PROJECT") ?? "";
-        public string BrowserstackEnvironment = Environment.GetEnvironmentVariable("BROWSERSTACK_ENVIRONMENT") ?? "";
-        public string BrowserstackLocalIdentifier = Environment.GetEnvironmentVariable("BROWSERSTACK_LOCAL_IDENTIFIER");
         private static string BrowserstackUser = Environment.GetEnvironmentVariable("BROWSERSTACK_USERNAME") ?? "";
         private static string BrowserstackKey = Environment.GetEnvironmentVariable("BROWSERSTACK_ACCESS_KEY") ?? "";
+        
+        /// <summary>
+        ///     Reference to the WebDriver
+        /// </summary>
+        public IWebDriver Driver { get; set; }
+        
+        /// <summary>
+        ///     Accuracy in promille for image comparison
+        /// </summary>
+        public int AccuracyInPromille { get; set; } = 1000;
 
+        /// <summary>
+        ///     Default timeout in seconds used for explicite waiting
+        /// </summary>
+        public int DefaultTimeout { get; set; } = 120;
+        
+        /// <summary>
+        ///     Indicates if the browser is a Desktop browser or not.
+        ///     Set in appsettings.browserstack.json
+        /// </summary>
+        public bool IsDesktop { get; set; } = false;
+
+        /// <summary>
+        ///     Indicates if a browser config for the given browser name is present in the 
+        ///     appsettings.browserstack.json
+        /// </summary>
+        public string Status { get; set; } = "NOK";
+        
+        /// <summary>
+        ///     Indicates if the tests run over BrowserStack local or not
+        /// </summary>
+        public bool BrowserstackLocal { get; set; } = false;
+        
+        /// <summary>
+        ///     Name of the test project
+        /// </summary>
+        public string BrowserstackProject { get; set; } = Environment.GetEnvironmentVariable("BROWSERSTACK_PROJECT") ?? "";
+        
+        /// <summary>
+        ///     Name of the test environment
+        /// </summary>
+        public string BrowserstackEnvironment { get; set; } = Environment.GetEnvironmentVariable("BROWSERSTACK_ENVIRONMENT") ?? "";
+        
+        /// <summary>
+        ///     LocalIdentifier for BrowserStack. This value will only set over the env
+        ///     inside the build pipeline.
+        /// </summary>
+        public string BrowserstackLocalIdentifier { get; set; } = Environment.GetEnvironmentVariable("BROWSERSTACK_LOCAL_IDENTIFIER");
+
+        /// <summary>
+        ///     Create a instance of the selected browser if configured 
+        ///     appsettings.browserstack.json
+        /// </summary>
+        /// <param name="browserName"></param>
         public Browser(string browserName)
         {
             var configFile = "appsettings.browserstack.json";
@@ -96,7 +140,7 @@ namespace FunkyBDD.SxS.Selenium.Browserstack
                 JToken browserConfig = result.FirstOrDefault();
 
                 AccuracyInPromille = (int)(browserConfig["AccuracyInPromille"] ?? 1000);
-                isDesktop = (bool)(browserConfig["isDesktop"] ?? false);
+                IsDesktop = (bool)(browserConfig["isDesktop"] ?? false);
 
                 var capabilities = new DesiredCapabilities();
                 capabilities.SetCapability("browserstack.user", BrowserstackUser);
@@ -132,12 +176,12 @@ namespace FunkyBDD.SxS.Selenium.Browserstack
                 firefoxOptions.LogLevel = FirefoxDriverLogLevel.Error;
                 firefoxOptions.AcceptInsecureCertificates = true;
                 firefoxOptions.AddArguments("-purgecaches", "-private", "--disable-gpu", "--disable-direct-write", "--disable-display-color-calibration", "--allow-http-screen-capture", "--disable-accelerated-2d-canvas");
-                isDesktop = true;
+                IsDesktop = true;
                 Driver = new FirefoxDriver("./", firefoxOptions, TimeSpan.FromSeconds(DefaultTimeout));
                 Status = $"Firefox - '{browserName}' not found in the config '{configFile}'";
             }
 
-            if (isDesktop)
+            if (IsDesktop)
             {
                 try
                 {
@@ -150,6 +194,9 @@ namespace FunkyBDD.SxS.Selenium.Browserstack
             }
         }
 
+        /// <summary>
+        ///     Dispose the WebDriver, NOT the browser object
+        /// </summary>
         public void DisposeDriver()
         {
             try
