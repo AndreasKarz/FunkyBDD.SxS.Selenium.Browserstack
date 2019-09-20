@@ -135,7 +135,7 @@ namespace FunkyBDD.SxS.Selenium.Browserstack
                                          where (string)browser["Name"] == browserName
                                          select browser;
 
-            if (result.Count() > 0)
+            if (result.Any())
             {
                 JToken browserConfig = result.FirstOrDefault();
 
@@ -175,7 +175,11 @@ namespace FunkyBDD.SxS.Selenium.Browserstack
                 firefoxOptions.SetLoggingPreference(LogType.Driver, LogLevel.Off);
                 firefoxOptions.LogLevel = FirefoxDriverLogLevel.Error;
                 firefoxOptions.AcceptInsecureCertificates = true;
+#if LOCAL
                 firefoxOptions.AddArguments("-purgecaches", "-private", "--disable-gpu", "--disable-direct-write", "--disable-display-color-calibration", "--allow-http-screen-capture", "--disable-accelerated-2d-canvas");
+#else
+                firefoxOptions.AddArguments("-headless", "-purgecaches", "-private", "--disable-gpu", "--disable-direct-write", "--disable-display-color-calibration", "--allow-http-screen-capture", "--disable-accelerated-2d-canvas");
+#endif
                 IsDesktop = true;
                 Driver = new FirefoxDriver("./", firefoxOptions, TimeSpan.FromSeconds(DefaultTimeout));
                 Status = $"Firefox - '{browserName}' not found in the config '{configFile}'";
