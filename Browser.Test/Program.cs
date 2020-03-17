@@ -1,13 +1,12 @@
 ﻿using System;
-using FunkyBDD.SxS.Selenium.Browserstack;
 
 namespace FunkyBDD.SxS.Selenium.Browserstack.Test
 {
-    class Program
+    static class Program
     {
         static void Main(string[] args)
         {
-            var browser = new Browser("iPhoneXS");
+            var browser = new Browser("FirefoxLocal");
             var driver = browser.Driver;
             driver.Navigate().GoToUrl("https://www.swisslife.ch/");
             Console.WriteLine($"The titel is '{driver.Title}'");

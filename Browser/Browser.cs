@@ -175,6 +175,7 @@ namespace FunkyBDD.SxS.Selenium.Browserstack
                 firefoxOptions.SetLoggingPreference(LogType.Driver, LogLevel.Off);
                 firefoxOptions.LogLevel = FirefoxDriverLogLevel.Error;
                 firefoxOptions.AcceptInsecureCertificates = true;
+                firefoxOptions.PageLoadStrategy = PageLoadStrategy.Eager;
 #if LOCAL
                 firefoxOptions.AddArguments("-purgecaches", "-private", "--disable-gpu", "--disable-direct-write", "--disable-display-color-calibration", "--allow-http-screen-capture", "--disable-accelerated-2d-canvas");
 #else
