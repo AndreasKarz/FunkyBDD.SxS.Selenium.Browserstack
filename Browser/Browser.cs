@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Remote;
 
 namespace FunkyBDD.SxS.Selenium.Browserstack
@@ -168,23 +168,16 @@ namespace FunkyBDD.SxS.Selenium.Browserstack
             }
             else
             {
-                var firefoxOptions = new FirefoxOptions();
-                firefoxOptions.SetLoggingPreference(LogType.Browser, LogLevel.Off);
-                firefoxOptions.SetLoggingPreference(LogType.Server, LogLevel.Off);
-                firefoxOptions.SetLoggingPreference(LogType.Client, LogLevel.Off);
-                firefoxOptions.SetLoggingPreference(LogType.Profiler, LogLevel.Off);
-                firefoxOptions.SetLoggingPreference(LogType.Driver, LogLevel.Off);
-                firefoxOptions.LogLevel = FirefoxDriverLogLevel.Error;
-                firefoxOptions.AcceptInsecureCertificates = true;
-                firefoxOptions.PageLoadStrategy = PageLoadStrategy.Eager;
-                firefoxOptions.AddArguments("-purgecaches", "-private", "--disable-gpu", "--disable-direct-write", "--disable-display-color-calibration", "--allow-http-screen-capture", "--disable-accelerated-2d-canvas");
+                var chromeOptions = new ChromeOptions();
+                chromeOptions.AcceptInsecureCertificates = true;
+                chromeOptions.AddArguments("-purgecaches", "-private", "--disable-gpu", "--disable-direct-write", "--disable-display-color-calibration", "--allow-http-screen-capture", "--disable-accelerated-2d-canvas");
                 if (Headless != "false")
                 {
-                    firefoxOptions.AddArguments("-headless");
+                    chromeOptions.AddArguments("-headless");
                 }
 
                 IsDesktop = true;
-                Driver = new FirefoxDriver("./", firefoxOptions, TimeSpan.FromSeconds(DefaultTimeout));
+                Driver = new ChromeDriver("./", chromeOptions, TimeSpan.FromSeconds(DefaultTimeout));
                 Status = $"Firefox - '{browserName}' not found in the config '{configFile}'";
             }
 
