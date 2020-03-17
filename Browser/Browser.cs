@@ -13,7 +13,8 @@ namespace FunkyBDD.SxS.Selenium.Browserstack
     {
         private static string BrowserstackUser = Environment.GetEnvironmentVariable("BROWSERSTACK_USERNAME") ?? "";
         private static string BrowserstackKey = Environment.GetEnvironmentVariable("BROWSERSTACK_ACCESS_KEY") ?? "";
-        
+        private static string Headless = Environment.GetEnvironmentVariable("HEADLESS") ?? "false";
+
         /// <summary>
         ///     Reference to the WebDriver
         /// </summary>
@@ -176,11 +177,12 @@ namespace FunkyBDD.SxS.Selenium.Browserstack
                 firefoxOptions.LogLevel = FirefoxDriverLogLevel.Error;
                 firefoxOptions.AcceptInsecureCertificates = true;
                 firefoxOptions.PageLoadStrategy = PageLoadStrategy.Eager;
-#if LOCAL
                 firefoxOptions.AddArguments("-purgecaches", "-private", "--disable-gpu", "--disable-direct-write", "--disable-display-color-calibration", "--allow-http-screen-capture", "--disable-accelerated-2d-canvas");
-#else
-                firefoxOptions.AddArguments("-headless", "-purgecaches", "-private", "--disable-gpu", "--disable-direct-write", "--disable-display-color-calibration", "--allow-http-screen-capture", "--disable-accelerated-2d-canvas");
-#endif
+                if (Headless != "false")
+                {
+                    firefoxOptions.AddArguments("-headless");
+                }
+
                 IsDesktop = true;
                 Driver = new FirefoxDriver("./", firefoxOptions, TimeSpan.FromSeconds(DefaultTimeout));
                 Status = $"Firefox - '{browserName}' not found in the config '{configFile}'";
